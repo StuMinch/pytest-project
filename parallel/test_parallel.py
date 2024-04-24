@@ -10,8 +10,7 @@ remote_url = "https://ondemand.us-west-1.saucelabs.com:443/wd/hub"
 
 @pytest.fixture(scope="class")
 def driver(request):
-    browser = request.param
-    options = getattr(Options, browser)()  # Get options based on browser type
+    options = Options()
     options.browser_version = 'latest'
     options.platform_name = 'Windows 10'
 
@@ -19,6 +18,7 @@ def driver(request):
     sauce_options['username'] = os.environ.get("SAUCE_USERNAME")
     sauce_options['accessKey'] = os.environ.get("SAUCE_ACCESS_KEY")
     sauce_options['build'] = 'Pytest Parallel Test'
+    sauce_options['name'] = 'Check Page Title'
     options.set_capability('sauce:options', sauce_options)
 
     driver = webdriver.Remote(command_executor=remote_url, options=options)
@@ -26,14 +26,16 @@ def driver(request):
     driver.quit()
 
 
-def test_desktop_version(driver):
-    driver.get("https://www.sony.com/")
-    print(f"Browser version: {driver.capabilities['browserVersion']}")
-    expected_title = 'Sony Group Portal - Home'
-    assert driver.title == expected_title, f"Unexpected title: {driver.title}"
-
-
-@pytest.mark.parametrize("driver", ["chrome", "edge"], indirect=True)
-def test_with_different_browsers(driver):
-    # Run the test with the provided browser through the fixture
-    pass
+@pytest.mark.parametrize(
+    "url, expected_title",
+    [
+        ("https://sony.com", "Sony Group Portal - Home"),
+        ("https://saucelabs.com", "Sauce Labs: Cross Browser Testing, Selenium Testing & Mobile Testing"),
+    ],
+)
+def test_page_title(driver, url, expected_title):
+    print(f"Sauce Session: https://app.saucelabs.com/tests/{driver.session_id}")
+    driver.get(url)
+    status = "passed" if driver.title == expected_title else "failed"
+    driver.execute_script("sauce:job-result={}".format(status))
+    assert driver.title == expected_title, f"Page title mismatch. Expected: {expected_title}, Actual: {driver.title}"
