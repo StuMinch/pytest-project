@@ -8,18 +8,20 @@ class HomeView(BaseView):
     USERNAME_FIELD = (AppiumBy.ACCESSIBILITY_ID, 'test-Username')
     PASSWORD_FIELD = (AppiumBy.ACCESSIBILITY_ID, 'test-Password')
     LOGIN_BUTTON = (AppiumBy.ACCESSIBILITY_ID, 'test-LOGIN')
-    ANDROID_SHOPPING_CART = (AppiumBy.XPATH, '//android.view.ViewGroup[@content-desc="test-Cart"]')
-    IOS_SHOPPING_CART = (AppiumBy.XPATH, '//XCUIElementTypeOther[@name="test-Cart"]')
+    DISPLAY_PRODUCTS = (AppiumBy.ACCESSIBILITY_ID, 'test-PRODUCTS')
 
     def sign_in(self):
         self.wait_for(self.USERNAME_FIELD).send_keys('standard_user')
         self.wait_for(self.PASSWORD_FIELD).send_keys('secret_sauce')
         self.wait_for(self.LOGIN_BUTTON).click()
-        if BaseView.platformName == 'iOS':
-            shopping_cart = self.wait_for(self.IOS_SHOPPING_CART)
-        elif BaseView.platformName == 'Android':
-            shopping_cart = self.wait_for(self.ANDROID_SHOPPING_CART)
-        else:
-            raise Exception(f"Unsupported platform: {platform}")
-        status = "passed" if shopping_cart else "failed"
+        try:
+            if self.wait_for(self.DISPLAY_PRODUCTS).is_displayed():
+                status = "passed"
+            else:
+                status = "failed"
+        except Exception as e:
+            print(f"Error finding DISPLAY_PRODUCTS element: {e}")
+            status = "failed"
         self.driver.execute_script("sauce:job-result={}".format(status))
+
+        assert self.wait_for(self.DISPLAY_PRODUCTS).is_displayed()
