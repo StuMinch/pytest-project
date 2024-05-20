@@ -18,11 +18,11 @@ jobs:
           python-version: '3.9'
 
       - name: Install dependencies
-        run: pip3 install pytest pytest-xdist selenium requests
+        run: pip3 install selenium requests
 
       - name: Run Sauce Labs tests
         env:
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        run: pytest -n 2 parallel/test_parallel.py
+        run: python3 simple_chrome_test.py
 
