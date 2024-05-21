@@ -20,9 +20,11 @@ jobs:
       - name: Install dependencies
         run: pip3 install selenium requests
 
-      - name: Run Sauce Labs tests
+      - name: Set up secrets
         env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+        run: echo 'Secret = ${{ secrets.SAUCE_ACCESS_KEY }}'
+
+      - name: Run Sauce Labs tests
         run: python3 simple_chrome_test.py
 
