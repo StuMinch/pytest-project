@@ -2,6 +2,9 @@ import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 
+username = os.environ.get("SAUCE_USERNAME")
+accessKey = os.environ.get("SAUCE_ACCESS_KEY")
+
 
 def check_version(options):
     driver = webdriver.Remote(command_executor="https://ondemand.us-west-1.saucelabs.com:443/wd/hub", options=options)
@@ -15,8 +18,8 @@ def test_chrome_version():
     options.browser_version = 'latest'
     options.platform_name = 'Windows 10'
     sauce_options = {}
-    sauce_options['username'] = os.environ.get("SAUCE_USERNAME")
-    sauce_options['accessKey'] = os.environ.get("SAUCE_ACCESS_KEY")
+    sauce_options['username'] = f'{username}'
+    sauce_options['accessKey'] = f'{accessKey}'
     sauce_options['build'] = 'Browser Version Check'
     sauce_options['name'] = 'Chrome Latest'
     sauce_options['extendedDebugging'] = True
