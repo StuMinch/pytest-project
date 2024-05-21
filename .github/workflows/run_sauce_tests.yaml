@@ -22,7 +22,7 @@ jobs:
 
       - name: Run Sauce Labs tests
         env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          SAUCE_USERNAME: ${{ Sauce.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ Sauce.SAUCE_ACCESS_KEY }}
         run: python3 simple_chrome_test.py
 
