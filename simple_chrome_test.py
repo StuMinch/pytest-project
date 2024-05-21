@@ -15,7 +15,7 @@ def test_chrome_version():
     options.platform_name = 'Windows 10'
     sauce_options = {}
     sauce_options['username'] = 'sminch'
-    sauce_options['accessKey'] = os.environ.get("SAUCE_ACCESS_KEY")
+    sauce_options['accessKey'] = '79d488b6-2fe2-4ee3-971a-9e0cda654a40'
     sauce_options['build'] = 'Browser Version Check'
     sauce_options['name'] = 'Chrome Latest'
     sauce_options['extendedDebugging'] = True
