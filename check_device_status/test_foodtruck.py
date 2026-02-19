@@ -24,17 +24,16 @@ def driver(request):
     # Get Sauce Labs credentials from environment
     username = os.environ.get("SAUCE_USERNAME")
     access_key = os.environ.get("SAUCE_ACCESS_KEY")
+    device_id = os.environ.get("SELECTED_DEVICE_ID")
     
     if not username or not access_key:
         raise ValueError("SAUCE_USERNAME and SAUCE_ACCESS_KEY environment variables are required")
     
-    # Create Appium options for iOS (use W3C-style capabilities and Appium 2)
+    
     options = XCUITestOptions()
     options.platform_name = 'iOS'
     options.automation_name = 'XCUITest'
-
-    # Vendor-prefixed (W3C) Appium capabilities
-    options.set_capability('appium:deviceName', 'iPhone_SE_2020_POC132||iPhone_SE_2020_POC124')
+    options.set_capability('appium:deviceName', f'{device_id}')
     options.set_capability('appium:app', 'storage:filename=FoodTruck.ipa')
 
     # Sauce Labs (sauce:options) - request Appium 2.x explicitly
@@ -42,7 +41,7 @@ def driver(request):
         'username': username,
         'accessKey': access_key,
         'appiumVersion': 'latest',
-        'build': 'Python Service - Check Device Status - Run 2',
+        'build': 'Python Service - Check Device Status - Run 3',
         'name': 'Food Truck Test'
     }
     options.set_capability('sauce:options', sauce_options)
