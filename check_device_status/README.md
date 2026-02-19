@@ -52,6 +52,23 @@ Background (simple):
 nohup python device_check_service.py > device_check.log 2>&1 &
 ```
 
+### Per-script device availability behavior
+
+When you pass multiple scripts with `--test-script`, the service will check for an available device before each script is executed. Example flow when running two scripts:
+
+1. Service waits for any configured device to become AVAILABLE
+2. Runs `test_features.py`
+3. After `test_features.py` completes, the service re-checks device availability
+4. Runs `test_foodtruck.py` when a device is AVAILABLE
+
+Example command:
+
+```bash
+python device_check_service.py --max-runs 1 --test-script test_features.py test_foodtruck.py
+```
+
+This ensures each test starts only when a device is actually available (useful when multiple devices are shared).
+
 ### How tests receive device info
 
 When a device becomes available the service sets the environment variable `SELECTED_DEVICE_ID` for the pytest process. In your tests read it with:
@@ -116,6 +133,23 @@ Ejecución en segundo plano (simple):
 ```bash
 nohup python device_check_service.py > device_check.log 2>&1 &
 ```
+
+### Comportamiento por script respecto a disponibilidad de dispositivos
+
+Si pasas varios scripts con `--test-script`, el servicio comprobará la disponibilidad de dispositivos antes de ejecutar cada script. Flujo de ejemplo al ejecutar dos scripts:
+
+1. El servicio espera a que cualquier dispositivo configurado esté AVAILABLE
+2. Ejecuta `test_features.py`
+3. Tras completar `test_features.py`, el servicio vuelve a comprobar la disponibilidad
+4. Ejecuta `test_foodtruck.py` cuando un dispositivo esté AVAILABLE
+
+Ejemplo de comando:
+
+```bash
+python device_check_service.py --max-runs 1 --test-script test_features.py test_foodtruck.py
+```
+
+Esto asegura que cada prueba comience sólo cuando haya un dispositivo realmente disponible (útil cuando varios dispositivos están compartidos).
 
 ### Cómo reciben las pruebas el dispositivo seleccionado
 

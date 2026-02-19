@@ -1,0 +1,9 @@
+flask
+requests
+apscheduler
+SQLAlchemy
+pydantic
+python-dotenv
+clean-text
+pytest
+Appium-Python-Client

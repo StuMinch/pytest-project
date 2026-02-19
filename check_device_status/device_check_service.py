@@ -170,9 +170,7 @@ class SauceLabsDeviceChecker:
                 self._log(f"Run number {run_count}")
                 self._log("=" * 50)
                 
-                # Wait for device and run the pytest script(s)
-                self.wait_for_devices()
-                # Normalize input to a list
+                # Normalize input to a list (done once per run loop)
                 if test_scripts is None:
                     scripts = ["test_features.py"]
                 elif isinstance(test_scripts, str):
@@ -180,7 +178,10 @@ class SauceLabsDeviceChecker:
                 else:
                     scripts = list(test_scripts)
 
+                # For each script, check device availability and then run the test.
+                # This ensures we re-check devices between tests.
                 for script in scripts:
+                    self.wait_for_devices()
                     self.run_test_suite(script)
                 
                 self._log("")
