@@ -35,7 +35,7 @@ def driver(request):
 
     # Vendor-prefixed (W3C) Appium capabilities
     options.set_capability('appium:deviceName', 'iPhone_SE_2020_POC132||iPhone_SE_2020_POC124')
-    options.set_capability('appium:app', 'storage:filename=Features-18.ipa')
+    options.set_capability('appium:app', 'storage:filename=FoodTruck.ipa')
 
     # Sauce Labs (sauce:options) - request Appium 2.x explicitly
     sauce_options = {
@@ -43,7 +43,7 @@ def driver(request):
         'accessKey': access_key,
         'appiumVersion': 'latest',
         'build': 'Python Service - Check Device Status - Run 2',
-        'name': 'Features Test'
+        'name': 'Food Truck Test'
     }
     options.set_capability('sauce:options', sauce_options)
 
@@ -74,28 +74,22 @@ class TestAlerts:
             
             # Wait for the alerts button to be displayed (5 second timeout)
             wait = WebDriverWait(driver, 5)
-            alerts_button = wait.until(
-                EC.visibility_of_element_located((AppiumBy.ACCESSIBILITY_ID, "Alerts"))
+            orders_button = wait.until(
+                EC.visibility_of_element_located((AppiumBy.XPATH, "//XCUIElementTypeStaticText[@name=\'New Orders\']"))
             )
             
             # Click the alerts button
-            alerts_button.click()
-            print("Successfully tapped on alerts button")
+            orders_button.click()
+            print("Successfully tapped on the orders button")
 
             
-            # Click the generate alert button
+            # Click the order 1224 button
             generate_button = wait.until(
-                EC.visibility_of_element_located((AppiumBy.ACCESSIBILITY_ID, "Generate Alert"))
+                EC.visibility_of_element_located((AppiumBy.ACCESSIBILITY_ID, "Order#1224"))
             )
             generate_button.click()
-            print("Successfully tapped on generate alert button")
+            print("Successfully tapped on the order")
             
-            # Click the OK button
-            ok_button = wait.until(
-                EC.visibility_of_element_located((AppiumBy.ACCESSIBILITY_ID, "OK"))
-            )
-            ok_button.click()
-            print("Successfully tapped on OK button")
             
             driver.execute_script("sauce:job-result=passed")
             assert True
