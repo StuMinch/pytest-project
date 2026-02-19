@@ -3,89 +3,6 @@
 This repository contains a small service that polls Sauce Labs private devices and runs pytest scripts when a device becomes available.
 
 ---
-
-## English
-
-### Prerequisites
-
-- Python 3 (virtual environment recommended)
-- `requests` and `pytest` installed in the environment
-- Appium/test dependencies for your tests (for example `appium-python-client`)
-- Your Sauce Labs credentials available as environment variables
-
-Set credentials in your shell:
-
-```bash
-export SAUCE_USERNAME=your-username
-export SAUCE_ACCESS_KEY=your-access-key
-```
-
-Activate the project's virtual environment (if used):
-
-```bash
-source venv/bin/activate
-```
-
-### Running the service
-
-Run once (single run):
-
-```bash
-python device_check_service.py --max-runs 1 --test-script test_features.py
-```
-
-Run continuously (poll devices and run tests each time one becomes available):
-
-```bash
-python device_check_service.py
-```
-
-Override devices or poll interval:
-
-```bash
-python device_check_service.py --devices iPhone_SE_2020_POC132 iPhone_SE_2020_POC124 --poll-interval 15
-```
-
-Background (simple):
-
-```bash
-nohup python device_check_service.py > device_check.log 2>&1 &
-```
-
-### Per-script device availability behavior
-
-When you pass multiple scripts with `--test-script`, the service will check for an available device before each script is executed. Example flow when running two scripts:
-
-1. Service waits for any configured device to become AVAILABLE
-2. Runs `test_features.py`
-3. After `test_features.py` completes, the service re-checks device availability
-4. Runs `test_foodtruck.py` when a device is AVAILABLE
-
-Example command:
-
-```bash
-python device_check_service.py --max-runs 1 --test-script test_features.py test_foodtruck.py
-```
-
-This ensures each test starts only when a device is actually available (useful when multiple devices are shared).
-
-### How tests receive device info
-
-When a device becomes available the service sets the environment variable `SELECTED_DEVICE_ID` for the pytest process. In your tests read it with:
-
-```python
-import os
-device_id = os.environ.get("SELECTED_DEVICE_ID")
-```
-
-### Troubleshooting
-
-- Ensure `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` are correct.
-- Verify network connectivity to Sauce Labs.
-- Ensure the Python environment has `requests`, `pytest`, and any Appium/test dependencies installed.
-
----
-
 ## Español
 
 ### Requisitos previos
@@ -168,4 +85,84 @@ device_id = os.environ.get("SELECTED_DEVICE_ID")
 
 ---
 
-If you want, I can also add a `requirements.txt` entry for `requests` and `appium-python-client`, or commit these changes to the repo.
+## English
+
+### Prerequisites
+
+- Python 3 (virtual environment recommended)
+- `requests` and `pytest` installed in the environment
+- Appium/test dependencies for your tests (for example `appium-python-client`)
+- Your Sauce Labs credentials available as environment variables
+
+Set credentials in your shell:
+
+```bash
+export SAUCE_USERNAME=your-username
+export SAUCE_ACCESS_KEY=your-access-key
+```
+
+Activate the project's virtual environment (if used):
+
+```bash
+source venv/bin/activate
+```
+
+### Running the service
+
+Run once (single run):
+
+```bash
+python device_check_service.py --max-runs 1 --test-script test_features.py
+```
+
+Run continuously (poll devices and run tests each time one becomes available):
+
+```bash
+python device_check_service.py
+```
+
+Override devices or poll interval:
+
+```bash
+python device_check_service.py --devices iPhone_SE_2020_POC132 iPhone_SE_2020_POC124 --poll-interval 15
+```
+
+Background (simple):
+
+```bash
+nohup python device_check_service.py > device_check.log 2>&1 &
+```
+
+### Per-script device availability behavior
+
+When you pass multiple scripts with `--test-script`, the service will check for an available device before each script is executed. Example flow when running two scripts:
+
+1. Service waits for any configured device to become AVAILABLE
+2. Runs `test_features.py`
+3. After `test_features.py` completes, the service re-checks device availability
+4. Runs `test_foodtruck.py` when a device is AVAILABLE
+
+Example command:
+
+```bash
+python device_check_service.py --max-runs 1 --test-script test_features.py test_foodtruck.py
+```
+
+This ensures each test starts only when a device is actually available (useful when multiple devices are shared).
+
+### How tests receive device info
+
+When a device becomes available the service sets the environment variable `SELECTED_DEVICE_ID` for the pytest process. In your tests read it with:
+
+```python
+import os
+device_id = os.environ.get("SELECTED_DEVICE_ID")
+```
+
+### Troubleshooting
+
+- Ensure `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` are correct.
+- Verify network connectivity to Sauce Labs.
+- Ensure the Python environment has `requests`, `pytest`, and any Appium/test dependencies installed.
+
+---
