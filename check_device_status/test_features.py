@@ -33,7 +33,6 @@ def driver(request):
     options.platform_name = 'iOS'
     options.automation_name = 'XCUITest'
     options.set_capability('appium:deviceName', f'{device_id}')
-    options.set_capability('appium:deviceName', 'iPhone_SE_2020_POC132||iPhone_SE_2020_POC124')
     options.set_capability('appium:app', 'storage:filename=Features-18.ipa')
 
     # Sauce Labs (sauce:options) - request Appium 2.x explicitly
