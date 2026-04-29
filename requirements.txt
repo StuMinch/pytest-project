@@ -1,3 +1,4 @@
+uuid
 requests
 apscheduler
 python-dotenv

@@ -6,9 +6,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
+import uuid
 
 # Sauce Labs Appium remote URL (credentials will be added dynamically)
-APPIUM_SERVER_BASE_URL = "https://ondemand.us-west-1.saucelabs.com:443/wd/hub"
+APPIUM_SERVER_BASE_URL = "https://ondemand.eu-central-1.saucelabs.com:443/wd/hub"
 
 
 @pytest.fixture(scope="class")
@@ -34,6 +35,7 @@ def driver(request):
     options.platform_name = 'iOS'
     options.automation_name = 'XCUITest'
     options.set_capability('appium:deviceName', f'{device_id}')
+    options.set_capability('appium:newCommandTimeout', 90)
     options.set_capability('appium:app', 'storage:filename=FoodTruck.ipa')
 
     # Sauce Labs (sauce:options) - request Appium 2.x explicitly
@@ -41,13 +43,14 @@ def driver(request):
         'username': username,
         'accessKey': access_key,
         'appiumVersion': 'latest',
-        'build': 'Python Service - Check Device Status - Run 3',
+        'uuid': str(uuid.uuid4()),
+        'build': 'Enable pytest debug log',
         'name': 'Food Truck Test'
     }
     options.set_capability('sauce:options', sauce_options)
 
     # Build the remote URL with credentials for authentication
-    remote_url = f"https://{username}:{access_key}@ondemand.us-west-1.saucelabs.com:443/wd/hub"
+    remote_url = f"https://{username}:{access_key}@ondemand.eu-central-1.saucelabs.com:443/wd/hub"
 
     # Initialize the Appium driver
     appium_driver = webdriver.Remote(

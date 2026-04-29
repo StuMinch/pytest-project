@@ -27,7 +27,7 @@ wait_for_devices() {
 }
 
 # --- Execute tests ---
-for i in {1..50}; do
+for i in {1..100}; do
     echo "=============================="
     echo "Run number $i"
     echo "=============================="

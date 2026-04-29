@@ -22,7 +22,7 @@ class SauceLabsDeviceChecker:
     def __init__(
         self,
         device_ids: List[str],
-        api_url: str = "https://api.us-west-1.saucelabs.com/v1/rdc/device-management/devices",
+        api_url: str = "https://api.eu-central-1.saucelabs.com/v1/rdc/device-management/devices",
         poll_interval: int = 10,
         max_runs: Optional[int] = None
     ):
@@ -121,7 +121,7 @@ class SauceLabsDeviceChecker:
             self._log(f"Executing pytest script: {test_script}")
             # Run pytest quietly for the single script
             result = subprocess.run([
-                sys.executable, "-m", "pytest", "-q", test_script
+                sys.executable, "-m", "pytest", "-q", "--log-cli-level=DEBUG", "-s", test_script
             ], env=env, check=False)
 
             if result.returncode == 0:
@@ -207,7 +207,7 @@ def main():
     parser.add_argument(
         "--devices",
         nargs="+",
-        default=["iPhone_SE_2020_POC132", "iPhone_SE_2020_POC124"],
+        default=["iPhone_SE_2022_16_POC07", "iPhone_14_Plus_16_POC46"],
         help="Device IDs to monitor (space-separated)"
     )
     parser.add_argument(
@@ -224,7 +224,7 @@ def main():
     )
     parser.add_argument(
         "--api-url",
-        default="https://api.us-west-1.saucelabs.com/v1/rdc/device-management/devices",
+        default="https://api.eu-central-1.saucelabs.com/v1/rdc/device-management/devices",
         help="Sauce Labs device management API URL"
     )
     # Use --test-script to specify pytest script

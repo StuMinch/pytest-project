@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import os
 
 # Sauce Labs Appium remote URL (credentials will be added dynamically)
-APPIUM_SERVER_BASE_URL = "https://ondemand.eu-central-1.saucelabs.com:443/wd/hub"
+APPIUM_SERVER_BASE_URL = "https://ondemand.us-west-1.saucelabs.com:443/wd/hub"
 
 
 @pytest.fixture(scope="class")
@@ -26,7 +26,6 @@ def driver(request):
     # Get Sauce Labs credentials from environment
     username = os.environ.get("SAUCE_USERNAME")
     access_key = os.environ.get("SAUCE_ACCESS_KEY")
-    device_id = os.environ.get("SELECTED_DEVICE_ID")
     
     if not username or not access_key:
         raise ValueError("SAUCE_USERNAME and SAUCE_ACCESS_KEY environment variables are required")
@@ -34,23 +33,24 @@ def driver(request):
     options = XCUITestOptions()
     options.platform_name = 'iOS'
     options.automation_name = 'XCUITest'
-    options.set_capability('appium:deviceName', f'{device_id}')
-    options.set_capability('appium:newCommandTimeout', 90)
-    options.set_capability('appium:app', 'storage:filename=Features-18.ipa')
+    options.set_capability('appium:deviceName', 'iPhone 13 Simulator')
+    options.set_capability('appium:platformVersion', '17.0')
+    options.set_capability('appium:newCommandTimeout', '90')
+    options.set_capability('appium:app', 'storage:1d6e86c6-5f98-47d3-a100-91a84632f40e')
 
     # Sauce Labs (sauce:options) - request Appium 2.x explicitly
     sauce_options = {
         'username': username,
         'accessKey': access_key,
-        'appiumVersion': 'latest',
+        'appiumVersion': '2.11.3',
         'uuid': str(uuid.uuid4()),
-        'build': 'Enable pytest debug log',
+        'build': 'Recreating User Abandoned Test',
         'name': 'Features Test'
     }
     options.set_capability('sauce:options', sauce_options)
 
     # Build the remote URL with credentials for authentication
-    remote_url = f"https://{username}:{access_key}@ondemand.eu-central-1.saucelabs.com:443/wd/hub"
+    remote_url = f"https://{username}:{access_key}@ondemand.us-west-1.saucelabs.com:443/wd/hub"
 
     # Initialize the Appium driver
     appium_driver = webdriver.Remote(
