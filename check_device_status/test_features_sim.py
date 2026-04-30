@@ -44,7 +44,7 @@ def driver(request):
         'accessKey': access_key,
         'appiumVersion': '2.11.3',
         'uuid': str(uuid.uuid4()),
-        'build': 'Recreating User Abandoned Test',
+        'build': 'User Abandoned Test - Standard HTTP Client',
         'name': 'Features Test'
     }
     options.set_capability('sauce:options', sauce_options)
