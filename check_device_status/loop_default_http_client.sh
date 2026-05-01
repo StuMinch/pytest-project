@@ -5,7 +5,7 @@ for i in $(seq 1 1000); do
 
     pids=()
     for j in $(seq 1 20); do
-        pytest test_features_sim.py --log-cli-level=DEBUG -s &
+        pytest test_features_sim_arm.py --log-cli-level=DEBUG -s &
         pids+=("$!")
     done
 
